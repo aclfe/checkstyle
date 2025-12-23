@@ -67,7 +67,7 @@ public class PrecedingIterator implements AxisIterator {
             if (result == null && previousSiblingEnum != null) {
                 result = previousSiblingEnum.next();
                 if (result == null) {
-                    previousSiblingEnum = null;
+                    //previousSiblingEnum = null;
                 }
                 else {
                     descendantEnum = new ReverseDescendantIterator(result);
