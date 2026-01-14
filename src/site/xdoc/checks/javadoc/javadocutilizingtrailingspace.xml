@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 https://maven.apache.org/xsd/xdoc-2.0.xsd">
+  <head>
+    <title>JavadocUtilizingTrailingSpace</title>
+  </head>
+  <body>
+    <section name="JavadocUtilizingTrailingSpace">
+      <p>Since Checkstyle 10.19</p>
+      <subsection name="Description" id="JavadocUtilizingTrailingSpace_Description">
+        <div>
+          Checks that Javadoc lines efficiently utilize the available horizontal space.
+        </div>
+
+        <p>
+          The check focuses strictly on line length:
+        </p>
+        <ul>
+          <li>Flags lines that break prematurely before the configured {@code lineLimit} when
+          content from the following line could have been moved up.</li>
+          <li>Flags lines that exceed {@code lineLimit}, except when the line starts with an
+          unbreakable element such as a Javadoc tag or URL.</li>
+        </ul>
+
+        <p>
+          Formatting concerns such as indentation, alignment, or HTML structure are intentionally
+          ignored and should be handled by other checks.
+        </p>
+
+        <p>
+          The check ignores:
+        </p>
+        <ul>
+          <li>Empty lines (lines with no visible content)</li>
+          <li>Lines containing only a block tag header (e.g., {@code @param}, {@code @return})
+          with no description</li>
+          <li>Lines that start with structural HTML tags (e.g., {@code &lt;p&gt;}, {@code &lt;ul&gt;})
+          and contain no other text</li>
+          <li>All content inside {@code &lt;pre&gt;} blocks</li>
+          <li>Lines that start with a Javadoc tag or URL (these are allowed to exceed the limit)</li>
+        </ul>
+      </subsection>
+
+      <subsection name="Properties" id="JavadocUtilizingTrailingSpace_Properties">
+        <div class="wrapper">
+          <table>
+            <tr>
+              <th>name</th>
+              <th>description</th>
+              <th>type</th>
+              <th>default value</th>
+              <th>since</th>
+            </tr>
+            <tr>
+              <td><a id="lineLimit"/><a href="#lineLimit">lineLimit</a></td>
+              <td>Target line length used to decide when Javadoc lines are too short or too long.
+              By default this mirrors the standard maximum from the LineLength check.</td>
+              <td><a href="../../property_types.html#int">int</a></td>
+              <td><code>80</code></td>
+              <td>10.19</td>
+            </tr>
+            <tr>
+              <td><a id="violateExecutionOnNonTightHtml"/><a href="#violateExecutionOnNonTightHtml">violateExecutionOnNonTightHtml</a></td>
+              <td>Control when to print violations if the Javadoc being examined by this check violates the tight html rules defined at <a href="../../writingjavadocchecks.html#Tight-HTML_rules">
+     Tight-HTML Rules</a>.</td>
+              <td><a href="../../property_types.html#boolean">boolean</a></td>
+              <td><code>false</code></td>
+              <td>10.19</td>
+            </tr>
+          </table>
+        </div>
+      </subsection>
+
+      <subsection name="Examples" id="JavadocUtilizingTrailingSpace_Examples">
+        <p id="Example1-config">
+          To configure the check with default settings:
+        </p>
+        <div class="wrapper"><pre class="prettyprint"><code class="language-xml">
+&lt;module name="Checker"&gt;
+  &lt;module name="TreeWalker"&gt;
+    &lt;module name="JavadocUtilizingTrailingSpace"/&gt;
+  &lt;/module&gt;
+&lt;/module&gt;
+</code></pre></div>
+        <p id="Example1-code">Example of violations:</p>
+        <div class="wrapper"><pre class="prettyprint"><code class="language-java">
+// violation 2 lines below 'Text in Javadoc line should utilize around 80 characters'
+/**
+ * The company returned value
+ * is invalid.
+ */
+// violation 1 line above 'Some words from next line should be moved to this line'
+
+// violation 2 lines below 'Line is longer than 80 characters (found 98)'
+/**
+ * Refer to the specific status {@link com.very.long.package.name.that.exceeds.limit.CompanyStatus}
+ */
+// violation 1 line above
+
+// OK - long inline tag at start of line is allowed
+/**
+ * {@link com.very.long.package.name.that.exceeds.limit.CompanyStatus}
+ */
+
+// OK - properly wrapped
+/**
+ * Refer to the specific status
+ * {@link com.very.long.package.name.that.exceeds.limit.CompanyStatus}
+ */
+</code></pre></div>
+
+        <p id="Example2-config">
+          To configure the check with a custom line limit:
+        </p>
+        <div class="wrapper"><pre class="prettyprint"><code class="language-xml">
+&lt;module name="Checker"&gt;
+  &lt;module name="TreeWalker"&gt;
+    &lt;module name="JavadocUtilizingTrailingSpace"&gt;
+      &lt;property name="lineLimit" value="100"/&gt;
+    &lt;/module&gt;
+  &lt;/module&gt;
+&lt;/module&gt;
+</code></pre></div>
+      </subsection>
+    </section>
+  </body>
+</document>
